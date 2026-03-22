@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsg.dev/schemas/audit-event.json",
+  "title": "DSG Audit Event",
+  "type": "object",
+  "required": ["epoch", "sequence", "region_id", "state_hash", "entropy", "gate_result"],
+  "properties": {
+    "epoch": { "type": "string" },
+    "sequence": { "type": "integer", "minimum": 0 },
+    "region_id": { "type": "string" },
+    "state_hash": { "type": "string" },
+    "entropy": { "type": "number", "minimum": 0 },
+    "gate_result": { "type": "string", "enum": ["ALLOW", "STABILIZE", "BLOCK"] },
+    "z3_proof_hash": { "type": ["string", "null"] },
+    "signature": { "type": ["string", "null"] },
+    "metadata": { "type": "object" }
+  },
+  "additionalProperties": false
+}

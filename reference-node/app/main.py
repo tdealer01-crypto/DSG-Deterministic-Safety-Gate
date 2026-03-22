@@ -1,9 +1,10 @@
 from fastapi import Depends, FastAPI
 
 from .auth import require_api_key
+from .audit import get_determinism, list_audit_events, record_audit_event
 from .database import init_db
 from .ledger import list_entries, metrics as ledger_metrics, record_execution
-from .models import ExecutionRequest
+from .models import AuditEventRequest, ExecutionRequest
 from .policy import evaluate_execution
 from .settings import get_settings
 
@@ -31,7 +32,7 @@ def health() -> dict:
         "status": "ok",
         "service": settings.app_name,
         "version": settings.app_version,
-        "database": "sqlite",
+        "database": "sqlite" if settings.is_sqlite else "postgresql",
     }
 
 
@@ -53,3 +54,20 @@ def execute(req: ExecutionRequest) -> dict:
 @app.get("/ledger", dependencies=[Depends(require_api_key)])
 def ledger() -> dict:
     return {"items": list_entries()}
+
+
+@app.post("/audit/event", dependencies=[Depends(require_api_key)])
+def ingest_audit_event(event: AuditEventRequest) -> dict:
+    entry = record_audit_event(event)
+    return {"ok": True, "item": entry}
+
+
+@app.get("/audit/events", dependencies=[Depends(require_api_key)])
+def audit_events(limit: int = 50) -> dict:
+    return {"items": list_audit_events(limit=limit)}
+
+
+@app.get("/audit/determinism/{sequence}", dependencies=[Depends(require_api_key)])
+def audit_determinism(sequence: int) -> dict:
+    result = get_determinism(sequence)
+    return result.model_dump()

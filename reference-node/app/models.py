@@ -21,3 +21,24 @@ class ExecutionDecision(BaseModel):
     agent_id: str
     action: str
     evaluated_at: str
+
+
+class AuditEventRequest(BaseModel):
+    epoch: str
+    sequence: int
+    region_id: str
+    state_hash: str
+    entropy: float = 0.0
+    gate_result: DecisionType
+    z3_proof_hash: str | None = None
+    signature: str | None = None
+    metadata: Dict[str, Any] = Field(default_factory=dict)
+
+
+class AuditDeterminismResult(BaseModel):
+    sequence: int
+    region_count: int
+    unique_state_hashes: int
+    max_entropy: float
+    deterministic: bool
+    gate_action: str

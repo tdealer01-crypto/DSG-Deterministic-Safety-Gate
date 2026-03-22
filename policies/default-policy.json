@@ -1,4 +1,0 @@
-{
-  "block_actions": ["danger", "delete_all", "exfiltrate"],
-  "stabilize_actions": ["elevate", "override", "high_risk"]
-}

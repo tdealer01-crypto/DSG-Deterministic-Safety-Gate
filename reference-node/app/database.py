@@ -47,6 +47,23 @@ def init_db() -> None:
                 )
                 """
             )
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS audit_events (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    epoch TEXT NOT NULL,
+                    sequence INTEGER NOT NULL,
+                    region_id TEXT NOT NULL,
+                    state_hash TEXT NOT NULL,
+                    entropy REAL NOT NULL,
+                    gate_result TEXT NOT NULL,
+                    z3_proof_hash TEXT,
+                    signature TEXT,
+                    metadata_json TEXT NOT NULL,
+                    created_at TEXT NOT NULL
+                )
+                """
+            )
             conn.commit()
     elif settings.is_postgres:
         with get_connection() as conn:
@@ -62,6 +79,23 @@ def init_db() -> None:
                         stability_score DOUBLE PRECISION NOT NULL,
                         reason TEXT NOT NULL,
                         evaluated_at TEXT NOT NULL
+                    )
+                    """
+                )
+                cur.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS audit_events (
+                        id SERIAL PRIMARY KEY,
+                        epoch TEXT NOT NULL,
+                        sequence BIGINT NOT NULL,
+                        region_id TEXT NOT NULL,
+                        state_hash TEXT NOT NULL,
+                        entropy DOUBLE PRECISION NOT NULL,
+                        gate_result TEXT NOT NULL,
+                        z3_proof_hash TEXT,
+                        signature TEXT,
+                        metadata_json TEXT NOT NULL,
+                        created_at TEXT NOT NULL
                     )
                     """
                 )
