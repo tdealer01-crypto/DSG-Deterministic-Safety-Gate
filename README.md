@@ -18,15 +18,37 @@ It is designed for game-like control planes where agents behave like players, de
 ```text
 /protocol
 /reference-node
+/docs
+/docker-compose.yml
 ```
 
 ## Initial Scope
 
-This repository starts with:
+This repository includes:
 
 - RFC-0001 protocol skeleton
 - Python FastAPI reference node
-- basic execution endpoint with deterministic decision output
+- policy engine module
+- in-memory ledger for audit events
+- Docker-based quickstart
+
+## Quick Start
+
+### Local
+
+```bash
+cd reference-node
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+### Docker
+
+```bash
+docker compose up --build
+```
+
+Then open `http://localhost:8000/docs`.
 
 ## Vision
 
@@ -39,4 +61,4 @@ DSG turns ordinary dashboards into control planes where:
 
 ## Status
 
-`v0.1` — initial scaffold
+`v0.2` — policy engine, ledger, and Docker scaffold added
