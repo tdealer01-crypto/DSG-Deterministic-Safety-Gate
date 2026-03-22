@@ -30,3 +30,10 @@ def test_execute_block() -> None:
     assert response.status_code == 200
     data = response.json()
     assert data["decision"] == "BLOCK"
+
+
+def test_policy_validation() -> None:
+    from app.policy_validation import validate_policy
+
+    errors = validate_policy({"block_actions": ["danger"], "stabilize_actions": ["elevate"]})
+    assert errors == []

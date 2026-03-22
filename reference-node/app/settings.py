@@ -11,9 +11,10 @@ from typing import Any
 @dataclass(frozen=True)
 class Settings:
     app_name: str = os.getenv("DSG_APP_NAME", "DSG Reference Node")
-    app_version: str = os.getenv("DSG_APP_VERSION", "0.6.0")
+    app_version: str = os.getenv("DSG_APP_VERSION", "0.7.0")
     database_url: str = os.getenv("DSG_DATABASE_URL", "sqlite:///./data/dsg.db")
     api_key: str | None = os.getenv("DSG_API_KEY")
+    api_keys_raw: str | None = os.getenv("DSG_API_KEYS")
     policy_file: str = os.getenv("DSG_POLICY_FILE", "./policies/default-policy.json")
     block_actions: tuple[str, ...] = tuple(
         action.strip()
@@ -40,6 +41,15 @@ class Settings:
     @property
     def is_postgres(self) -> bool:
         return self.database_url.startswith("postgresql://") or self.database_url.startswith("postgres://")
+
+    @property
+    def api_keys(self) -> tuple[str, ...]:
+        keys: list[str] = []
+        if self.api_key:
+            keys.append(self.api_key)
+        if self.api_keys_raw:
+            keys.extend([k.strip() for k in self.api_keys_raw.split(",") if k.strip()])
+        return tuple(dict.fromkeys(keys))
 
     def load_policy_file(self) -> dict[str, Any]:
         path = Path(self.policy_file)
