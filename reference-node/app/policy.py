@@ -3,24 +3,26 @@ from __future__ import annotations
 from datetime import datetime, timezone
 
 from .models import ExecutionDecision, ExecutionRequest
-
-DANGEROUS_ACTIONS = {"danger", "delete_all", "exfiltrate"}
-STABILIZE_ACTIONS = {"elevate", "override", "high_risk"}
+from .settings import get_settings
 
 
 def evaluate_execution(req: ExecutionRequest) -> ExecutionDecision:
-    if req.action in DANGEROUS_ACTIONS:
+    settings = get_settings()
+    block_actions = set(settings.block_actions)
+    stabilize_actions = set(settings.stabilize_actions)
+
+    if req.action in block_actions:
         decision = "BLOCK"
         stability_score = 0.10
-        reason = "Action violates default safety policy"
-    elif req.action in STABILIZE_ACTIONS:
+        reason = "Action violates configured safety policy"
+    elif req.action in stabilize_actions:
         decision = "STABILIZE"
         stability_score = 0.55
         reason = "Action requires stabilization before execution"
     else:
         decision = "ALLOW"
         stability_score = 0.95
-        reason = "Execution satisfies default policy"
+        reason = "Execution satisfies configured policy"
 
     return ExecutionDecision(
         decision=decision,

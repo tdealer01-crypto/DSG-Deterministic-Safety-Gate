@@ -28,9 +28,11 @@ This repository includes:
 
 - RFC-0001 protocol skeleton
 - Python FastAPI reference node
-- policy engine module
-- in-memory ledger for audit events
+- configurable policy engine
+- persistent SQLite-backed ledger
+- health and metrics endpoints
 - Docker-based quickstart
+- basic test suite
 
 ## Quick Start
 
@@ -48,7 +50,17 @@ uvicorn app.main:app --reload
 docker compose up --build
 ```
 
-Then open `http://localhost:8000/docs`.
+Then open:
+- `http://localhost:8000/docs`
+- `http://localhost:8000/health`
+- `http://localhost:8000/metrics`
+
+### Run Tests
+
+```bash
+cd reference-node
+pytest
+```
 
 ## Vision
 
@@ -61,4 +73,4 @@ DSG turns ordinary dashboards into control planes where:
 
 ## Status
 
-`v0.2` — policy engine, ledger, and Docker scaffold added
+`v0.3` — config, persistence, observability, and tests added

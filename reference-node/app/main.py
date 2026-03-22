@@ -1,10 +1,18 @@
 from fastapi import FastAPI
 
-from .ledger import list_entries, record_execution
+from .database import init_db
+from .ledger import list_entries, metrics as ledger_metrics, record_execution
 from .models import ExecutionRequest
 from .policy import evaluate_execution
+from .settings import get_settings
 
-app = FastAPI(title="DSG Reference Node", version="0.2.0")
+settings = get_settings()
+app = FastAPI(title=settings.app_name, version=settings.app_version)
+
+
+@app.on_event("startup")
+def startup() -> None:
+    init_db()
 
 
 @app.get("/")
@@ -12,8 +20,23 @@ def root() -> dict:
     return {
         "status": "DSG Node Online",
         "service": "reference-node",
-        "version": "0.2.0",
+        "version": settings.app_version,
     }
+
+
+@app.get("/health")
+def health() -> dict:
+    return {
+        "status": "ok",
+        "service": settings.app_name,
+        "version": settings.app_version,
+        "database": "sqlite",
+    }
+
+
+@app.get("/metrics")
+def metrics() -> dict:
+    return ledger_metrics()
 
 
 @app.post("/execute")
