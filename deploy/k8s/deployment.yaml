@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dsg-reference-node
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dsg-reference-node
+  template:
+    metadata:
+      labels:
+        app: dsg-reference-node
+    spec:
+      containers:
+        - name: reference-node
+          image: ghcr.io/tdealer01-crypto/dsg-deterministic-safety-gate:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DSG_APP_VERSION
+              value: "0.5.0"
+            - name: DSG_POLICY_FILE
+              value: "/app/policies/default-policy.json"

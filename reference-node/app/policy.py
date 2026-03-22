@@ -8,8 +8,9 @@ from .settings import get_settings
 
 def evaluate_execution(req: ExecutionRequest) -> ExecutionDecision:
     settings = get_settings()
-    block_actions = set(settings.block_actions)
-    stabilize_actions = set(settings.stabilize_actions)
+    policy = settings.load_policy_file()
+    block_actions = set(policy.get("block_actions", list(settings.block_actions)))
+    stabilize_actions = set(policy.get("stabilize_actions", list(settings.stabilize_actions)))
 
     if req.action in block_actions:
         decision = "BLOCK"

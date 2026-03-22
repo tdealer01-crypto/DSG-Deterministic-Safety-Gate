@@ -19,24 +19,29 @@ It is designed for game-like control planes where agents behave like players, de
 /protocol
 /reference-node
 /sdk-python
+/sdk-js
 /cli
 /docs
+/examples
+/deploy
 /.github/workflows
 /docker-compose.yml
 ```
 
-## Initial Scope
-
-This repository includes:
+## Included in v0.5
 
 - RFC-0001 protocol skeleton
-- JSON schemas for request/decision messages
+- JSON schemas for request and decision messages
 - Python FastAPI reference node
-- configurable policy engine
+- configurable policy engine with YAML/JSON policy loading
 - persistent SQLite-backed ledger
+- API key auth layer for protected endpoints
 - Python SDK
+- JavaScript SDK
 - CLI for execution and inspection
+- examples for Python and JavaScript
 - GitHub Actions CI workflow
+- Kubernetes deploy manifests
 
 ## Quick Start
 
@@ -57,13 +62,21 @@ docker compose up --build
 Then open:
 - `http://localhost:8000/docs`
 - `http://localhost:8000/health`
-- `http://localhost:8000/metrics`
+
+Protected endpoints support `x-api-key` when `DSG_API_KEY` is configured.
 
 ### Python SDK
 
 ```bash
 cd sdk-python
 pip install -e .
+```
+
+### JavaScript SDK
+
+```bash
+cd sdk-js
+npm install
 ```
 
 ### CLI
@@ -84,4 +97,4 @@ DSG turns ordinary dashboards into control planes where:
 
 ## Status
 
-`v0.4` — SDK, CLI, schemas, and CI added
+`v0.5` — JS SDK, policy files, auth, examples, and k8s manifests added

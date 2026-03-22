@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 
+from .auth import require_api_key
 from .database import init_db
 from .ledger import list_entries, metrics as ledger_metrics, record_execution
 from .models import ExecutionRequest
@@ -34,12 +35,12 @@ def health() -> dict:
     }
 
 
-@app.get("/metrics")
+@app.get("/metrics", dependencies=[Depends(require_api_key)])
 def metrics() -> dict:
     return ledger_metrics()
 
 
-@app.post("/execute")
+@app.post("/execute", dependencies=[Depends(require_api_key)])
 def execute(req: ExecutionRequest) -> dict:
     decision = evaluate_execution(req)
     entry = record_execution(req, decision)
@@ -49,6 +50,6 @@ def execute(req: ExecutionRequest) -> dict:
     }
 
 
-@app.get("/ledger")
+@app.get("/ledger", dependencies=[Depends(require_api_key)])
 def ledger() -> dict:
     return {"items": list_entries()}
