@@ -24,23 +24,25 @@ It is designed for game-like control planes where agents behave like players, de
 /docs
 /examples
 /deploy
+/scripts
 /.github/workflows
 /docker-compose.yml
 ```
 
-## Included in v0.5
+## Included in v0.6
 
 - RFC-0001 protocol skeleton
-- JSON schemas for request and decision messages
+- JSON schemas for request, decision, and policy messages
 - Python FastAPI reference node
-- configurable policy engine with YAML/JSON policy loading
-- persistent SQLite-backed ledger
+- configurable policy engine with YAML/JSON policy loading and validation
+- persistent SQLite-backed ledger with PostgreSQL option
 - API key auth layer for protected endpoints
 - Python SDK
 - JavaScript SDK
-- CLI for execution and inspection
+- CLI for execution, inspection, policy validation, and API key generation
+- OpenAPI export script
 - examples for Python and JavaScript
-- GitHub Actions CI workflow
+- GitHub Actions CI workflow and release scaffold
 - Kubernetes deploy manifests
 
 ## Quick Start
@@ -83,7 +85,15 @@ npm install
 
 ```bash
 python cli/dsg.py health
+python cli/dsg.py generate-api-key
+python cli/dsg.py validate-policy --path policies/default-policy.json
 python cli/dsg.py execute --agent-id agt_demo --action scan --payload '{"target":"node-1"}'
+```
+
+### Export OpenAPI
+
+```bash
+python scripts/export_openapi.py
 ```
 
 ## Vision
@@ -97,4 +107,4 @@ DSG turns ordinary dashboards into control planes where:
 
 ## Status
 
-`v0.5` — JS SDK, policy files, auth, examples, and k8s manifests added
+`v0.6` — OpenAPI export, policy validation, API key tooling, Postgres option, and release scaffold added

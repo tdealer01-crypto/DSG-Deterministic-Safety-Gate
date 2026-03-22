@@ -11,7 +11,7 @@ from typing import Any
 @dataclass(frozen=True)
 class Settings:
     app_name: str = os.getenv("DSG_APP_NAME", "DSG Reference Node")
-    app_version: str = os.getenv("DSG_APP_VERSION", "0.5.0")
+    app_version: str = os.getenv("DSG_APP_VERSION", "0.6.0")
     database_url: str = os.getenv("DSG_DATABASE_URL", "sqlite:///./data/dsg.db")
     api_key: str | None = os.getenv("DSG_API_KEY")
     policy_file: str = os.getenv("DSG_POLICY_FILE", "./policies/default-policy.json")
@@ -31,7 +31,15 @@ class Settings:
         prefix = "sqlite:///"
         if self.database_url.startswith(prefix):
             return Path(self.database_url[len(prefix) :])
-        raise ValueError("Only sqlite:/// URLs are currently supported")
+        raise ValueError("Database URL is not sqlite:/// format")
+
+    @property
+    def is_sqlite(self) -> bool:
+        return self.database_url.startswith("sqlite:///")
+
+    @property
+    def is_postgres(self) -> bool:
+        return self.database_url.startswith("postgresql://") or self.database_url.startswith("postgres://")
 
     def load_policy_file(self) -> dict[str, Any]:
         path = Path(self.policy_file)
