@@ -18,7 +18,10 @@ It is designed for game-like control planes where agents behave like players, de
 ```text
 /protocol
 /reference-node
+/sdk-python
+/cli
 /docs
+/.github/workflows
 /docker-compose.yml
 ```
 
@@ -27,12 +30,13 @@ It is designed for game-like control planes where agents behave like players, de
 This repository includes:
 
 - RFC-0001 protocol skeleton
+- JSON schemas for request/decision messages
 - Python FastAPI reference node
 - configurable policy engine
 - persistent SQLite-backed ledger
-- health and metrics endpoints
-- Docker-based quickstart
-- basic test suite
+- Python SDK
+- CLI for execution and inspection
+- GitHub Actions CI workflow
 
 ## Quick Start
 
@@ -55,11 +59,18 @@ Then open:
 - `http://localhost:8000/health`
 - `http://localhost:8000/metrics`
 
-### Run Tests
+### Python SDK
 
 ```bash
-cd reference-node
-pytest
+cd sdk-python
+pip install -e .
+```
+
+### CLI
+
+```bash
+python cli/dsg.py health
+python cli/dsg.py execute --agent-id agt_demo --action scan --payload '{"target":"node-1"}'
 ```
 
 ## Vision
@@ -73,4 +84,4 @@ DSG turns ordinary dashboards into control planes where:
 
 ## Status
 
-`v0.3` — config, persistence, observability, and tests added
+`v0.4` — SDK, CLI, schemas, and CI added
