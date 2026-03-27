@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "decision": { "enum": ["ALLOW", "STABILIZE", "BLOCK"] },
+    "phase": { "enum": ["UNITY", "TUNING", "CHAOS"] },
+    "stability": { "type": "number" },
+    "entropy": { "type": "number" },
+    "proof_hash": { "type": "string" },
+    "reasons": { "type": "array", "items": { "type": "string" } },
+    "ledger_hash": { "type": "string" },
+    "version": { "type": "string" }
+  },
+  "required": [
+    "decision",
+    "phase",
+    "stability",
+    "entropy",
+    "proof_hash",
+    "reasons",
+    "ledger_hash",
+    "version"
+  ]
+}
