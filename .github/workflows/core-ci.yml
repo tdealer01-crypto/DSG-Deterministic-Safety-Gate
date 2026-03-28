@@ -1,0 +1,34 @@
+name: dsg-core-quality
+
+on:
+  push:
+    paths:
+      - "dsg-core/**"
+  pull_request:
+    paths:
+      - "dsg-core/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: dsg-core
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install -e .[dev]
+
+      - run: pip install ruff
+
+      - run: ruff check .
+
+      - run: ruff format --check .
+
+      - run: pytest
