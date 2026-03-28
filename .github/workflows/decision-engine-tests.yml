@@ -1,0 +1,34 @@
+name: decision-engine-tests
+
+on:
+  push:
+    paths:
+      - "services/decision-engine/**"
+      - ".github/workflows/decision-engine-tests.yml"
+  pull_request:
+    paths:
+      - "services/decision-engine/**"
+      - ".github/workflows/decision-engine-tests.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: services/decision-engine
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install -r requirements-dev.txt
+
+      - run: ruff check .
+
+      - run: ruff format --check .
+
+      - run: pytest
