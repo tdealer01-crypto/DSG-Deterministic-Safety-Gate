@@ -73,6 +73,32 @@ Minimal, evidence-based plan:
 3. Keep formal-core claims strict and separate from runtime/product claims.
 4. Align route/response contracts between `dsg-core` and `reference-node` (follow-up task in-repo).
 
+
+## 7.1) Immediate Merge Sequence (No Additional Live API Dependency)
+
+Based on current visible evidence plus user-confirmed status:
+- Already merged: PR #25, #26, #33.
+- Open/pending at latest check: PR #34 (read-side normalization), PR #35 (build-unblock follow-up for #34).
+- PR #36 status: จุดนี้ยังยืนยันไม่ได้จากไฟล์และข้อมูลที่มองเห็นอยู่
+
+Recommended execution order (operationally safe):
+1. **Stabilize read-side chain first**: merge **#35** only if it is required to make **#34** green; then merge **#34** immediately after verification on `main`.
+2. **Resolve #36 explicitly**:
+   - If #36 is the fallback policy patch for `lib/dsg-core.ts` and CI is green, merge #36 in the same release window as #34/#35.
+   - If not green, keep #36 queued after #34/#35 and avoid coupling release gates to it.
+3. **Collapse duplicate PR lines to one survivor** (do not keep parallel PRs in same lane):
+   - either merge newest and close superseded PR,
+   - or rebase older PR and close others,
+   - but end with **one** canonical PR stream.
+4. **After read-side closure**, open/merge a dedicated change for execute-contract mismatch (control-plane vs canonical DSG core).
+5. **Finish small env/docs debt** from #26 notes (`.env.example` alignment + docs sync) as final cleanup PR.
+
+Release-gate checklist for this sequence:
+- one active PR per concern at merge time
+- green CI on base `main` before merge
+- post-merge smoke check for read-side endpoints + build
+- explicit contract diff note for execute-plane changes
+
 ## 8) Files / Repos To Change
 
 Changed now:
