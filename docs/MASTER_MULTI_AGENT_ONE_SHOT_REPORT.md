@@ -125,3 +125,9 @@ Body:
 ## 15) Hard Blockers
 
 - No direct local visibility into the other listed repositories in this workspace, so cross-repo canonical/supporting/overlap classification remains incomplete.
+
+## Addendum (Execution Prompt Alignment)
+
+- Requested mode acknowledged: **REAL PRODUCT ONLY + NO-BACK-AND-FORTH + QUOTA SAFE + VERIFIED DSG CORE**.
+- Coordinator decision in this workspace: execute local-repo verification path, skip unverifiable cross-repo assertions.
+- GITHUB_CONTEXT status for multi-repo live scan: **NOT_READY** (other listed repositories are not visible in this filesystem checkout).
